@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ICD-10 Code Search</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input { width: 300px; padding: 8px; margin-bottom: 10px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    .pagination { margin-top: 10px; }
+    .pagination button { margin: 0 2px; padding: 5px 10px; }
+  </style>
+</head>
+<body>
+  <h1>ICD-10 Code Search</h1>
+  <input type="text" id="searchInput" placeholder="Search by code or description..." />
+  <div id="results"></div>
+  <div class="pagination" id="pagination"></div>
+
+  <script>
+    const sheetId = '1jsFhteUOiE1RF5Q0NpWcL_fUJ52NI8ofHR3qWwz7ZPQ';
+    const sheetName = 'Sheet1'; // Replace with your actual sheet name
+    const csvUrl = `https://docs.google.com/spreadsheets/d/e/2PACX-1vThTqAjzi-MoiSxDNiKIEqcRVR0qiVwCLqmiQVR7CWo0e5tNfpVM8eOO7LOSsnstNOV_-4yXfFAdAVr/pubhtml`;
+
+    let data = [];
+    let filteredData = [];
+    let currentPage = 1;
+    const resultsPerPage = 50;
+
+    // Fetch and parse CSV data
+    fetch(csvUrl)
+      .then(response => response.text())
+      .then(csvText => {
+        data = parseCSV(csvText);
+        filteredData = data;
+        renderResults();
+      });
+
+    // Parse CSV text into an array of objects
+    function parseCSV(csvText) {
+      const lines = csvText.trim().split('\n');
+      const headers = lines[0].split(',');
+      return lines.slice(1).map(line => {
+        const values = line.split(',');
+        return headers.reduce((obj, header, index) => {
+          obj[header.trim()] = values[index].trim();
+          return obj;
+        }, {});
+      });
+    }
+
+    // Render results for the current page
+    function renderResults() {
+      const startIndex = (currentPage - 1) * resultsPerPage;
+      const endIndex = startIndex + resultsPerPage;
+      const pageData = filteredData.slice(startIndex, endIndex);
+
+      const table = document.createElement('table');
+      const thead = document.createElement('thead');
+      const headerRow = document.createElement('tr');
+      Object.keys(data[0]).forEach(header => {
+        const th = document.createElement('th');
+        th.textContent = header;
+        headerRow.appendChild(th);
+      });
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      const tbody = document.createElement('tbody');
+      pageData.forEach(row => {
+        const tr = document.createElement('tr');
+        Object.values(row).forEach(value => {
+          const td = document.createElement('td');
+          td.textContent = value;
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+      table.appendChild(tbody);
+
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.innerHTML = '';
+      resultsDiv.appendChild(table);
+
+      renderPagination();
+    }
+
+    // Render pagination buttons
+    function renderPagination() {
+      const totalPages = Math.ceil(filteredData.length / resultsPerPage);
+      const paginationDiv = document.getElementById('pagination');
+      paginationDiv.innerHTML = '';
+
+      for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button');
+        button.textContent = i;
+        if (i === currentPage) {
+          button.disabled = true;
+        }
+        button.addEventListener('click', () => {
+          currentPage = i;
+          renderResults();
+        });
+        paginationDiv.appendChild(button);
+      }
+    }
+
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', event => {
+      const query = event.target.value.toLowerCase();
+      filteredData = data.filter(row =>
+        Object.values(row).some(value =>
+          value.toLowerCase().includes(query)
+        )
+      );
+      currentPage = 1;
+      renderResults();
+    });
+  </script>
+</body>
+</html>
