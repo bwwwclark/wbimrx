@@ -11,6 +11,7 @@
     .pagination { margin-top: 10px; }
     .pagination button { margin: 0 2px; padding: 5px 10px; }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
   <h1>ICD-10 Code Search</h1>
@@ -46,18 +47,13 @@
 
     // Convert CSV text into array of objects
     function parseCSV(csvText) {
-      const lines = csvText.trim().split('\n');
-      const headers = lines[0].split(',').map(h => h.trim());
-      return lines.slice(1).map((line, i) => {
-        const values = line.split(',');
-        const row = headers.reduce((obj, header, index) => {
-          obj[header] = values[index] ? values[index].trim() : '';
-          return obj;
-        }, {});
-        return row;
-      });
-    }
-
+  const parsed = Papa.parse(csvText, {
+    header: true,
+    skipEmptyLines: true,
+  });
+  console.log('Parsed CSV:', parsed.data);
+  return parsed.data;
+}
     // Display current page of filtered data
     function renderResults() {
       const startIndex = (currentPage - 1) * resultsPerPage;
