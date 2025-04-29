@@ -7,6 +7,7 @@
 </head>
 <body>
   <h1>ICD-10 RAF Sorter</h1>
+  <h3>Paste ICD-10 codes here for sorting. You can either separated them with commas or put them each on a new line</h3>
   <textarea id="inputCodes" rows="10" cols="50" placeholder="Enter ICD-10 codes separated by commas or new lines..."></textarea>
   <br><br>
   <button onclick="sortCodes()">Sort by RAF Score</button>
@@ -17,6 +18,7 @@
 
   <!-- Copy/Paste Output Section [ADDED] -->
   <h2>Copy/Paste Output (Codes Only):</h2>
+  <h3>Copy these sorted codes to submit for payment</h3>
   <textarea id="codeOutput" rows="10" cols="50" readonly></textarea>
   <br>
   <button onclick="copyToClipboard()">Copy to Clipboard</button>
