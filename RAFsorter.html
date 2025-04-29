@@ -39,8 +39,8 @@
             console.log("First row keys:", Object.keys(sampleRow));
 
             // Try to find actual keys by fuzzy match
-            let codeKey = Object.keys(sampleRow).find(k => k.toLowerCase().includes("Diagnosis Code));
-            let scoreKey = Object.keys(sampleRow).find(k => k.toLowerCase().includes("CMS-HCC Model Score V28"));
+            let codeKey = Object.keys(sampleRow).find(k => k.toLowerCase().includes("diagnosis"));
+            let scoreKey = Object.keys(sampleRow).find(k => k.toLowerCase().includes("score"));
 
             console.log("Using codeKey:", codeKey);
             console.log("Using scoreKey:", scoreKey);
