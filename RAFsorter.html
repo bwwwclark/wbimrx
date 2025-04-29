@@ -13,6 +13,13 @@
 
   <h2>Sorted Codes:</h2>
   <ul id="output"></ul>
+  <p id="summary"></p>
+
+  <!-- Copy/Paste Output Section [ADDED] -->
+  <h2>Copy/Paste Output (Codes Only):</h2>
+  <textarea id="codeOutput" rows="10" cols="50" readonly></textarea>
+  <br>
+  <button onclick="copyToClipboard()">Copy to Clipboard</button>
 
   <script>
     let icd10Data = {};
@@ -20,7 +27,7 @@
     // Fetch data from published Google Sheet CSV using PapaParse
     async function fetchData() {
       try {
-        const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vThTqAjzi-MoiSxDNiKIEqcRVR0qiVwCLqmiQVR7CWo0e5tNfpVM8eOO7LOSsnstNOV_-4yXfFAdAVr/pub?output=csv";
+        const url = "https://docs.google.com/spreadsheets/d/1jsFhteUOiE1RF5Q0NpWcL_fUJ52NI8ofHR3qWwz7ZPQ/export?format=csv&gid=2124366762";
         const response = await fetch(url);
         const csvText = await response.text();
 
@@ -28,9 +35,20 @@
           header: true,
           skipEmptyLines: true,
           complete: function(results) {
+            const sampleRow = results.data[0];
+            console.log("First row keys:", Object.keys(sampleRow));
+
+            // Try to find actual keys by fuzzy match
+            let codeKey = Object.keys(sampleRow).find(k => k.toLowerCase().includes("icd"));
+            let scoreKey = Object.keys(sampleRow).find(k => k.toLowerCase().includes("v28"));
+
+            console.log("Using codeKey:", codeKey);
+            console.log("Using scoreKey:", scoreKey);
+
             results.data.forEach(row => {
-              const code = row["Diagnosis Code"]?.replace(/['"\s]+/g, '').trim().toUpperCase();
-              const score = parseFloat(row["CMS-HCC Model Score V28"]) || null;
+              const rawCode = row[codeKey];
+              const code = rawCode?.replace(/['"\s]+/g, '').trim().toUpperCase();
+              const score = parseFloat(row[scoreKey]) || null;
               if (code) {
                 icd10Data[code] = { score };
               }
@@ -61,6 +79,9 @@
 
       const codesWithScores = codes.map(code => {
         const info = icd10Data[code];
+        if (!info) {
+          console.warn(`Code not found: ${code}`);
+        }
         return {
           code,
           score: info?.score ?? null
@@ -77,15 +98,36 @@
       // Output
       const output = document.getElementById('output');
       output.innerHTML = '';
+      let matchedCount = 0;
+      const sortedCodeList = [];
+
       codesWithScores.forEach(entry => {
         const li = document.createElement('li');
         if (entry.score === null) {
           li.textContent = `${entry.code} - Not Found`;
         } else {
           li.textContent = `${entry.code} - RAF Score: ${entry.score}`;
+          matchedCount++;
+          sortedCodeList.push(entry.code);
         }
         output.appendChild(li);
       });
+
+      // Summary paragraph
+      const summary = document.getElementById('summary');
+      summary.textContent = `Matched ${matchedCount} of ${codes.length} codes.`;
+
+      // Output raw code list to copy/paste box
+      document.getElementById('codeOutput').value = sortedCodeList.join("\n");
+    }
+
+    // Copy-to-Clipboard function [ADDED]
+    function copyToClipboard() {
+      const textArea = document.getElementById('codeOutput');
+      textArea.select();
+      textArea.setSelectionRange(0, 99999); // For mobile
+      document.execCommand("copy");
+      alert("Copied to clipboard");
     }
 
     // Preload data
