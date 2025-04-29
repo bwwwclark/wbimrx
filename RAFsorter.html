@@ -21,8 +21,8 @@
       try {
        // const sheetId = '1jsFhteUOiE1RF5Q0NpWcL_fUJ52NI8ofHR3qWwz7ZPQ'; // Your sheet ID
        // const gid = '2124366762'; // Specific sheet tab (adjust if needed)
-       // const url = `https://docs.google.com/spreadsheets/d/e/2PACX-1vThTqAjzi-MoiSxDNiKIEqcRVR0qiVwCLqmiQVR7CWo0e5tNfpVM8eOO7LOSsnstNOV_-4yXfFAdAVr/pub?output=csv'`;
-        const url = `https://docs.google.com/spreadsheets/d/1jsFhteUOiE1RF5Q0NpWcL_fUJ52NI8ofHR3qWwz7ZPQ/export?format=csv&gid=2124366762`;
+        const url = `https://docs.google.com/spreadsheets/d/e/2PACX-1vThTqAjzi-MoiSxDNiKIEqcRVR0qiVwCLqmiQVR7CWo0e5tNfpVM8eOO7LOSsnstNOV_-4yXfFAdAVr/pub?output=csv`;
+       // const url = `https://docs.google.com/spreadsheets/d/1jsFhteUOiE1RF5Q0NpWcL_fUJ52NI8ofHR3qWwz7ZPQ/export?format=csv&gid=2124366762`;
         const response = await fetch(url);
         const text = await response.text();
 
