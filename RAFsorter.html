@@ -31,7 +31,7 @@
         // Map ICD-10 codes to RAF Scores
         json.table.rows.forEach(row => {
           const code = row.c[0]?.v?.toUpperCase(); // assuming code is first column
-          const score = parseFloat(row.c[5]?.v) || null; // assuming CMS-HCC Model Score V28 is 6th column (index 5)
+          const score = parseFloat(row.c[6]?.v) || null; // assuming CMS-HCC Model Score V28 is 6th column (index 5)
           if (code) {
             icd10Data[code] = { score };
           }
