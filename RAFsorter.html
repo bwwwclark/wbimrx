@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ICD-10 RAF Sorter</title>
+</head>
+<body>
+  <h1>ICD-10 RAF Sorter</h1>
+  <textarea id="inputCodes" rows="10" cols="50" placeholder="Enter ICD-10 codes separated by commas or new lines..."></textarea>
+  <br><br>
+  <button onclick="sortCodes()">Sort by RAF Score</button>
+
+  <h2>Sorted Codes:</h2>
+  <ul id="output"></ul>
+
+  <script>
+    let icd10Data = {};
+
+    // Fetch data from Google Sheets as JSON
+    async function fetchData() {
+      try {
+        const sheetId = '1jsFhteUOiE1RF5Q0NpWcL_fUJ52NI8ofHR3qWwz7ZPQ'; // Your sheet ID
+        const gid = '2124366762'; // Specific sheet tab (adjust if needed)
+        const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:json&gid=${gid}`;
+
+        const response = await fetch(url);
+        const text = await response.text();
+
+        const json = JSON.parse(text.substring(47).slice(0, -2)); // Clean Google "JSON"
+
+        // Map ICD-10 codes to RAF Scores
+        json.table.rows.forEach(row => {
+          const code = row.c[0]?.v?.toUpperCase(); // assuming code is first column
+          const score = parseFloat(row.c[5]?.v) || null; // assuming CMS-HCC Model Score V28 is 6th column (index 5)
+          if (code) {
+            icd10Data[code] = { score };
+          }
+        });
+
+      } catch (error) {
+        console.error('Error fetching or parsing data:', error);
+      }
+    }
+
+    async function sortCodes() {
+      if (Object.keys(icd10Data).length === 0) {
+        await fetchData();
+      }
+
+      const input = document.getElementById('inputCodes').value;
+
+      // Split by commas or newlines, clean spaces
+      const codes = input.split(/[\n,]/).map(code => code.trim().toUpperCase()).filter(code => code !== "");
+
+      const codesWithScores = codes.map(code => {
+        const info = icd10Data[code];
+        return {
+          code,
+          score: info?.score ?? null
+        };
+      });
+
+      // Sort descending, put 'null' (not found) at the bottom
+      codesWithScores.sort((a, b) => {
+        if (a.score === null) return 1;
+        if (b.score === null) return -1;
+        return b.score - a.score;
+      });
+
+      // Output
+      const output = document.getElementById('output');
+      output.innerHTML = '';
+      codesWithScores.forEach(entry => {
+        const li = document.createElement('li');
+        if (entry.score === null) {
+          li.textContent = `${entry.code} - Not Found`;
+        } else {
+          li.textContent = `${entry.code} - RAF Score: ${entry.score}`;
+        }
+        output.appendChild(li);
+      });
+    }
+
+    // Optionally preload data
+    fetchData();
+  </script>
+</body>
+</html>
