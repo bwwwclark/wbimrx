@@ -29,7 +29,7 @@
           skipEmptyLines: true,
           complete: function(results) {
             results.data.forEach(row => {
-              const code = row["ICD-10 Code"]?.replace(/['"\s]+/g, '').trim().toUpperCase();
+              const code = row["Diagnosis Code"]?.replace(/['"\s]+/g, '').trim().toUpperCase();
               const score = parseFloat(row["CMS-HCC Model Score V28"]) || null;
               if (code) {
                 icd10Data[code] = { score };
