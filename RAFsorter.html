@@ -29,7 +29,7 @@
     // Assume ICD-10 code is in column 0, and CMS-HCC Model Score V28 is in column 5
     for (let i = 1; i < lines.length; i++) {
       const cols = lines[i].split(",");
-      const code = cols[0]?.trim().toUpperCase();
+      const code = cols[0]?.replace(/['"]+/g, '').trim().toUpperCase(); // [MODIFIED] Clean up quotes and spacing
       const score = parseFloat(cols[5]) || null;
 
       if (code) {
@@ -38,6 +38,8 @@
     }
 
     console.log(`Loaded ${Object.keys(icd10Data).length} codes.`);
+    console.log("Sample codes:", Object.keys(icd10Data).slice(0, 10)); // [ADDED] Debug logging
+    
   } catch (error) {
     console.error("Error fetching or parsing data:", error);
   }
@@ -52,7 +54,7 @@
       const input = document.getElementById('inputCodes').value;
 
       // Split by commas or newlines, clean spaces
-      const codes = input.split(/[\n,]/).map(code => code.trim().toUpperCase()).filter(code => code !== "");
+      const codes = input.split(/[\n,]/).map(code => code.replace(/['"]+/g, '').trim().toUpperCase()).filter(code => code !== ""); // [MODIFIED]
 
       const codesWithScores = codes.map(code => {
         const info = icd10Data[code];
