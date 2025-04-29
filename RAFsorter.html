@@ -73,9 +73,12 @@
       const input = document.getElementById('inputCodes').value;
 
       // Split by commas or newlines, clean spaces and quotes
-      const codes = input.split(/[\n,]/).map(code => code.replace(/['"\s]+/g, '').trim().toUpperCase()).filter(code => code !== "");
-
-      console.log("User input:", codes);
+     // const codes = input.split(/[\n,]/).map(code => code.replace(/['"\s]+/g, '').trim().toUpperCase()).filter(code => code !== "");
+    const codes = input
+      .split(/[\n,]/)
+      .map(code => code.replace(/[.'"\s]+/g, '').trim().toUpperCase()) // [MODIFIED] Now strips periods (.)
+      .filter(code => code !== "");
+          console.log("User input:", codes);
 
       const codesWithScores = codes.map(code => {
         const info = icd10Data[code];
