@@ -30,7 +30,7 @@
     for (let i = 1; i < lines.length; i++) {
       const cols = lines[i].split(",");
       const code = cols[0]?.replace(/['"]+/g, '').trim().toUpperCase(); // [MODIFIED] Clean up quotes and spacing
-      const score = parseFloat(cols[5]) || null;
+      const score = parseFloat(cols[6]) || null;
 
       if (code) {
         icd10Data[code] = { score };
