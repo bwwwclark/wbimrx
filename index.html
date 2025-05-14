@@ -103,10 +103,19 @@
       table.appendChild(tbody);
 
       const resultsDiv = document.getElementById('results');
-      resultsDiv.innerHTML = '';
-      resultsDiv.appendChild(table);
+    resultsDiv.innerHTML = '';
+resultsDiv.appendChild(table);
 
-      renderPagination();
+// ✅ Add click listener to each row after rendering
+table.querySelectorAll('tbody tr').forEach(row => {
+  row.addEventListener('click', () => {
+    const cells = Array.from(row.querySelectorAll('td')).map(td => td.innerText);
+    const encoded = encodeURIComponent(JSON.stringify(cells));
+    window.location.href = `details.html?data=${encoded}`;
+  });
+});
+
+renderPagination();
       console.log(`Rendering page ${currentPage}/${Math.ceil(filteredData.length / resultsPerPage)}`);
     }
 
@@ -140,18 +149,4 @@
     });
   </script>
 </body>
-    <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const table = document.querySelector('table');
-    const rows = table.querySelectorAll('tbody tr');
-
-    rows.forEach(row => {
-      row.addEventListener('click', () => {
-        const cells = Array.from(row.querySelectorAll('td')).map(td => td.innerText);
-        const encoded = encodeURIComponent(JSON.stringify(cells));
-        window.location.href = `details.html?data=${encoded}`;
-      });
-    });
-  });
-</script>
 </html>
