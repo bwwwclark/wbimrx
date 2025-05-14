@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RAF Detail</title>
+  <style>
+    body { font-family: sans-serif; padding: 1em; }
+    .field { margin-bottom: 1em; }
+    .label { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h2>Record Details</h2>
+  <div id="output"></div>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const data = JSON.parse(decodeURIComponent(urlParams.get('data')));
+
+    const output = document.getElementById('output');
+
+    // Replace this list with your actual column headers
+    const headers = [
+      'Diagnosis Code (ICD-10)', 'Description', 'Has V28 HCC code', 'V28 CMS-HCC Model Category Name',
+      'V28 CMS-HCC Model RAF Score', // and so on for each column you want
+    ];
+
+    data.forEach((value, index) => {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'field';
+
+      const label = document.createElement('div');
+      label.className = 'label';
+      label.textContent = headers[index] || `Field ${index + 1}`;
+
+      const content = document.createElement('div');
+      content.textContent = value;
+
+      wrapper.appendChild(label);
+      wrapper.appendChild(content);
+      output.appendChild(wrapper);
+    });
+  </script>
+</body>
+</html>
