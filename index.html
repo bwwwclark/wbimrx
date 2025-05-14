@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ICD-10 Code Search Tool</title>
 <style>
+ body { font-family: Arial, sans-serif; padding: 20px; }
+    input { width: 300px; padding: 8px; margin-bottom: 10px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    .pagination { margin-top: 10px; }
+    .pagination button { margin: 0 2px; padding: 5px 10px; }
+
     @media (max-width: 768px) {
-  table td:nth-child(n+4),
-  table th:nth-child(n+4) {
-    display: none;
-  }
-}
+      table td:nth-child(n+4),
+      table th:nth-child(n+4) {
+        display: none;
+      }
+    }
 </style>
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-C8JD7NWK47"></script>
