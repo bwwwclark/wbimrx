@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<style>
+    @media (max-width: 768px) {
+  table td:nth-child(n+4),
+  table th:nth-child(n+4) {
+    display: none;
+  }
+}
+</style>
     <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-C8JD7NWK47"></script>
 <script>
@@ -132,4 +140,18 @@
     });
   </script>
 </body>
+    <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const table = document.querySelector('table');
+    const rows = table.querySelectorAll('tbody tr');
+
+    rows.forEach(row => {
+      row.addEventListener('click', () => {
+        const cells = Array.from(row.querySelectorAll('td')).map(td => td.innerText);
+        const encoded = encodeURIComponent(JSON.stringify(cells));
+        window.location.href = `details.html?data=${encoded}`;
+      });
+    });
+  });
+</script>
 </html>
