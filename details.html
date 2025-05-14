@@ -25,21 +25,22 @@
       'V28 CMS-HCC Model RAF Score', // and so on for each column you want
     ];
 
-    data.forEach((value, index) => {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'field';
+data.forEach((value, index) => {
+  const wrapper = document.createElement('div');
+  wrapper.className = 'field';
 
-      const label = document.createElement('div');
-      label.className = 'label';
-      label.textContent = headers[index] || `Field ${index + 1}`;
+  const label = document.createElement('div');
+  label.className = 'label';
+  label.textContent = headers[index] || `Field ${index + 1}`;
 
-      const content = document.createElement('div');
-      content.textContent = value;
+  const content = document.createElement('div');
+  content.textContent = (value && value.trim()) ? value : 'None';
 
-      wrapper.appendChild(label);
-      wrapper.appendChild(content);
-      output.appendChild(wrapper);
-    });
+  wrapper.appendChild(label);
+  wrapper.appendChild(content);
+  output.appendChild(wrapper);
+});
+
   </script>
 </body>
 </html>
