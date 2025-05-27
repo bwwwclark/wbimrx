@@ -1,32 +1,88 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-C8JD7NWK47"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-C8JD7NWK47');
-</script>
-  
-  <meta charset="UTF-8" />
- <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ICD-10 Code Search Tool</title>
+ <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rafly - ICD-10 RAF Lookup</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    input { width: 300px; padding: 8px; margin-bottom: 10px; }
-    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    .pagination { margin-top: 10px; }
-    .pagination button { margin: 0 2px; padding: 5px 10px; }
-     #searchInput {font-size: 16px;}
-      
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 1rem;
+    }
 
+    h1 {
+      font-size: 24px;
+      margin-bottom: 0.5rem;
+    }
+
+    p.intro {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 1rem;
+    }
+
+    #searchInput {
+      font-size: 16px;
+      padding: 0.5rem;
+      width: 100%;
+      max-width: 500px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      margin-bottom: 1rem;
+    }
+
+    .table-container {
+      overflow-x: auto;
+      max-width: 100%;
+      background: white;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 600px;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    th {
+      background-color: #f0f0f0;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+      background-color: #fdfdfd;
+    }
+
+    tr:hover {
+      background-color: #f5faff;
+    }
+
+    @media (max-width: 768px) {
+      table td:nth-child(n+4),
+      table th:nth-child(n+4) {
+        display: none;
+      }
+    }
+  </style>
 </head>
+<body>
+
+  <h1>Rafly: ICD-10 RAF Score Lookup</h1>
+  <p class="intro">
+    Quickly search ICD-10 codes and sort by RAF score. Designed for PCPs in value-based care arrangements.
+  </p>
+
 <body>
   <h1>ICD-10 Code Search: CMS-HCC V28</h1>
     <p>Search for ICD-10 code or description to find its Risk Adjustment Factor and details under CMS-HCC V28 Risk Adjustment Model</p>
