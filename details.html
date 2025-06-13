@@ -42,5 +42,24 @@ data.forEach((value, index) => {
 });
 
   </script>
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const tableRows = document.querySelectorAll("table tbody tr");
+
+    tableRows.forEach((row) => {
+      // Assume the code is in the first column
+      const codeCell = row.querySelector("td");
+      if (!codeCell) return;
+
+      const code = codeCell.textContent.trim();
+
+      row.style.cursor = "pointer";
+      row.addEventListener("click", () => {
+        window.location.href = `detail.html?code=${encodeURIComponent(code)}`;
+      });
+    });
+  });
+</script>
+
 </body>
 </html>
